@@ -22,13 +22,15 @@ export default class LinkedList {
 
   // Return the length of the list
   // O(M)
+  // Possible optimisation: O(1) if we maintain this.length on each edit.
+  //  - Tradoffs: risk of inconsistent state; 8 bytes extra memory
   length () {
-    let length = 0
-    for (const _ of this) {
-      length++
+    let index
+    for (const [, i] of iterateNodes(this)) {
+      index = i
     }
 
-    return length
+    return index + 1
   }
 
   // Push a new value to the front of the list
@@ -55,36 +57,38 @@ export default class LinkedList {
   // Remove a value from an arbitrary index
   // O(N)
   remove (index) {
-    let i = 0
-    let currentNode = this.head
+    let targetNode = null
     let prevNode = null
 
-    while (i < index) {
-      i++
-      prevNode = currentNode
-      currentNode = currentNode.next
-      if (!currentNode) {
-        return null
+    for (const [node, i] of iterateNodes(this)) {
+      if (i === index) {
+        targetNode = node
+        break
+      } else {
+        prevNode = node
       }
     }
 
-    if (prevNode) {
-      prevNode.next = currentNode.next
-    } else {
-      this.head = currentNode.next
+    if (!targetNode) {
+      return null
     }
-    if (currentNode === this.tail) {
+
+    if (prevNode) {
+      prevNode.next = targetNode.next
+    } else {
+      this.head = targetNode.next
+    }
+
+    if (targetNode === this.tail) {
       this.tail = prevNode
     }
 
-    return currentNode.value
+    return targetNode.value
   }
 
   * [Symbol.iterator ] () {
-    let currentNode = this.head
-    while (currentNode) {
-      yield currentNode.value
-      currentNode = currentNode.next
+    for (const [node] of iterateNodes(this)) {
+      yield node.value
     }
   }
 }
@@ -97,11 +101,21 @@ function node (value, next = null) {
   return { value, next }
 }
 
+function * iterateNodes (list) {
+  let currentNode = list.head
+  let i = 0
+  while (currentNode) {
+    yield [currentNode, i++]
+    currentNode = currentNode.next
+  }
+}
+
 const list = new LinkedList(1)
 list.push(2)
 list.pop()
 list.push(3)
 list.push(4)
+list.push(5)
 list.remove(1)
 console.log([...list])
-console.log(list.length)
+console.log(list.length())
