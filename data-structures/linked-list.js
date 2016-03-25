@@ -1,6 +1,8 @@
 /*eslint no-unused-vars: [2, { "varsIgnorePattern": "_" }]*/
 
-// TODO compare classical, OLOO and functional structures
+// This implementation stores a reference to the head (first) and tail (last)
+//  elements. The benefit of the `tail` reference is O(1) push. The costs are
+//  increased state management and slightly higher memory usage.
 export default class LinkedList {
 
   // TODO accept iterable
@@ -12,12 +14,16 @@ export default class LinkedList {
   // O(1)
   first () {
     return this.head
+      ? this.head.value
+      : null
   }
 
   // Return the last element of the list
   // O(1)
   last () {
     return this.tail
+      ? this.tail.value
+      : null
   }
 
   // Return the length of the list
@@ -25,15 +31,15 @@ export default class LinkedList {
   // Possible optimisation: O(1) if we maintain this.length on each edit.
   //  - Tradoffs: risk of inconsistent state; 8 bytes extra memory
   length () {
-    let index
+    let length = 0
     for (const [, i] of iterateNodes(this)) {
-      index = i
+      length = i + 1
     }
 
-    return index + 1
+    return length
   }
 
-  // Push a new value to the front of the list
+  // Add a new value to the end of the list
   // O(1)
   push (value) {
     const newNode = node(value)
@@ -45,13 +51,30 @@ export default class LinkedList {
     }
 
     this.tail = newNode
-    return this
+    return value
   }
 
   // Remove a value from the end of the list
   // O(N)
   pop () {
     return this.remove(this.length() - 1)
+  }
+
+  // Add value to the start of the list
+  // 0(1)
+  unshift (value) {
+    this.head = node(value, this.head)
+    if (!this.tail) {
+      this.tail = this.head
+    }
+
+    return value
+  }
+
+  // Remove a value from the start of the list
+  // O(1)
+  shift () {
+    return this.remove(0)  
   }
 
   // Remove a value from an arbitrary index
@@ -94,7 +117,7 @@ export default class LinkedList {
 }
 
 function node (value, next = null) {
-  if (!value) {
+  if (typeof value === "undefined") {
     return null
   }
 
@@ -117,5 +140,10 @@ list.push(3)
 list.push(4)
 list.push(5)
 list.remove(1)
+list.remove(2)
+list.shift()
+list.unshift(0)
 console.log([...list])
 console.log(list.length())
+console.log(list.first())
+console.log(list.last())
