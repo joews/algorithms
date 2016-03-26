@@ -1,13 +1,19 @@
 /*eslint no-unused-vars: [2, { "varsIgnorePattern": "_" }]*/
 
 // This implementation stores a reference to the head (first) and tail (last)
-//  elements. The benefit of the `tail` reference is O(1) push. The costs are
-//  increased state management and slightly higher memory usage.
+//  elements and maintains the current length.
+// The benefit of the `tail` reference is O(1) `push. 
+// The benefits of the `length` property are O(1) `length` 
+//  and improved performance of `push` and `pop`.
+// The costs of both are lightly higher memory usage (one Number, one reference)
+//  and state redundancy/complexity, therefore risk of bugs
 export default class LinkedList {
 
   // initialValues: Iterable
   constructor (initialValues) {
     this.head = this.tail = null
+    this._length = 0
+
     if (initialValues) {
       this.insertAll(0, initialValues)
     }
@@ -30,16 +36,9 @@ export default class LinkedList {
   }
 
   // Return the length of the list
-  // O(M)
-  // Possible optimisation: O(1) if we maintain this.length on each edit.
-  //  - Tradoffs: risk of inconsistent state; 8 bytes extra memory
+  // O(1)
   length () {
-    let length = 0
-    for (const [, i] of iterateNodes(this)) {
-      length = i + 1
-    }
-
-    return length
+    return this._length
   }
 
   // Return the node at index `index`
@@ -106,6 +105,7 @@ export default class LinkedList {
       nodeBeforeIndex.next = newNode
     }
 
+    this._length ++
     return newNode
   }
 
@@ -151,6 +151,7 @@ export default class LinkedList {
       this.tail = prevNode
     }
 
+    this._length --
     return targetNode.value
   }
 
