@@ -54,16 +54,7 @@ export default class LinkedList {
   // Add a new value to the end of the list
   // O(1)
   push (value) {
-    const newNode = node(value)
-
-    if (!this.head) {
-      this.head = newNode
-    } else if (this.tail) {
-      this.tail.next = newNode
-    }
-
-    this.tail = newNode
-    return value
+    return this.insert(this.length(), value)
   }
 
   // Remove a value from the end of the list
@@ -75,12 +66,7 @@ export default class LinkedList {
   // Add value to the start of the list
   // 0(1)
   unshift (value) {
-    this.head = node(value, this.head)
-    if (!this.tail) {
-      this.tail = this.head
-    }
-
-    return value
+    return this.insert(0, value)
   }
 
   // Remove a value from the start of the list
