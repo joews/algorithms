@@ -6,7 +6,7 @@
   "scripts": {
     "debug": "devtool debug.js",
     "lint": "standard",
-    "test": "babel-node data-structures/linked-list.js"
+    "test": "babel-node data-structures/hash-table.js"
   },
   "repository": {
     "type": "git",
