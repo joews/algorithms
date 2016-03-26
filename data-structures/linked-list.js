@@ -39,6 +39,18 @@ export default class LinkedList {
     return length
   }
 
+  // Return the node at index `index`
+  // O(N)
+  get (index) {
+    for (const [node, i] of iterateNodes(this)) {
+      if (i === index) {
+        return node
+      }
+    }
+
+    return null
+  }
+
   // Add a new value to the end of the list
   // O(1)
   push (value) {
@@ -74,7 +86,38 @@ export default class LinkedList {
   // Remove a value from the start of the list
   // O(1)
   shift () {
-    return this.remove(0)  
+    return this.remove(0)
+  }
+
+  // Insert a value at an arbitrary index
+  // O(N)
+  insert (index, newValue) {
+    if (index < 0) {
+      return null
+    }
+
+    const newNode = node(newValue)
+    if (index === 0) {
+      newNode.next = this.head
+      this.head = newNode
+    } else {
+      const nodeBeforeIndex = this.get(index - 1)
+      if (!nodeBeforeIndex) {
+        // We tried to add a node out-of-range
+        return null
+      }
+
+      const nodeAtIndex = nodeBeforeIndex.next
+      if (nodeAtIndex) {
+        newNode.next = nodeAtIndex
+      } else {
+        this.tail = newNode
+      }
+
+      nodeBeforeIndex.next = newNode
+    }
+
+    return newNode
   }
 
   // Remove a value from an arbitrary index
@@ -117,7 +160,7 @@ export default class LinkedList {
 }
 
 function node (value, next = null) {
-  if (typeof value === "undefined") {
+  if (typeof value === 'undefined') {
     return null
   }
 
@@ -143,6 +186,9 @@ list.remove(1)
 list.remove(2)
 list.shift()
 list.unshift(0)
+list.insert(0, 10)
+list.insert(list.length(), 11)
+list.insert(1, 12)
 console.log([...list])
 console.log(list.length())
 console.log(list.first())
