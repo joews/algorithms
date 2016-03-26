@@ -5,9 +5,12 @@
 //  increased state management and slightly higher memory usage.
 export default class LinkedList {
 
-  // TODO accept iterable
-  constructor (value) {
-    this.head = this.tail = node(value)
+  // initialValues: Iterable
+  constructor (initialValues) {
+    this.head = this.tail = null
+    if (initialValues) {
+      this.insertAll(0, initialValues)
+    }
   }
 
   // Return the first element of the list
@@ -106,6 +109,19 @@ export default class LinkedList {
     return newNode
   }
 
+  // Insert an iterable sequence of values starting at `startIndex`
+  // Returns the number of elements that were added
+  // O(N)
+  // TODO optimise: batch inserts then set head, tail once
+  insertAll (startIndex, iterable) {
+    let nextIndex = startIndex
+    for (const value of iterable) {
+      this.insert(nextIndex++, value)
+    }
+
+    return nextIndex - startIndex
+  }
+
   // Remove a value from an arbitrary index
   // O(N)
   remove (index) {
@@ -162,7 +178,7 @@ function * iterateNodes (list) {
   }
 }
 
-const list = new LinkedList(1)
+const list = new LinkedList([0, 1])
 list.push(2)
 list.pop()
 list.push(3)
@@ -175,7 +191,11 @@ list.unshift(0)
 list.insert(0, 10)
 list.insert(list.length(), 11)
 list.insert(1, 12)
+list.insertAll(2, [20, 21, 22])
 console.log([...list])
 console.log(list.length())
 console.log(list.first())
 console.log(list.last())
+
+const emptyList = new LinkedList()
+console.log([...emptyList])
