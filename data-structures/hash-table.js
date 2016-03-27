@@ -1,5 +1,4 @@
 // Hash table
-// Hash table
 // Functional style (Pure functions, immutable state)
 
 // Dummy implementation for testing
@@ -13,7 +12,7 @@ export function hashTable (initialPairs) {
         yield e
       }
     }
-  } 
+  }
 }
 
 export function set (table, key, value) {
@@ -21,7 +20,6 @@ export function set (table, key, value) {
   result.set(key, value)
   return hashTable(result)
 }
-
 
 export function remove (table, key) {
   const result = new Map(table._map)
@@ -36,13 +34,3 @@ export function has (table, key) {
 export function size (table) {
   return table._map.size
 }
-
-const t0 = hashTable([["name", "ann"], ["age", 30]])
-const t1 = set(t0, "a", 1)
-const t2 = set(t1, "b", 2)
-const t3 = set(t2, "b", 3)
-const t4 = remove(t3, "age")
-
-console.log([...t2])
-console.log([...t4])
-console.log(size(t4)) 
