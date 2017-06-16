@@ -13,14 +13,20 @@ function isAnagram(a, b) {
     return false;
   }
 
+  if (a === b) {
+    return true;
+  }
+
   const aPrimes = getPrimes(a);
   const bPrimes = getPrimes(b);
 
   return product(aPrimes) === product(bPrimes);
 }
 
+// Map each character in `str` to a prime number
+// Assume that the string contains characters with code points 0 - 1000
 function getPrimes(str) {
-  return str.split("").map((c, i) => primes[c.charCodeAt(0)]);
+  return str.split("").map((c, i) => primes[c.codePointAt(0)]);
 }
 
 function product(numbers) {
