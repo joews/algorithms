@@ -6,7 +6,7 @@ const primes = require("./primes");
 // 2. Multiply the primes for each word
 // 3. If the product is the same, the words are anagrams
 //
-// I first came across the algorhtm in a tweet:
+// I first came across the algorithm in a tweet:
 // https://twitter.com/fermatslibrary/status/875340896379817984
 function isAnagram(a, b) {
   if (a.length !== b.length) {
